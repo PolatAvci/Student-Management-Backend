@@ -22,22 +22,19 @@ public class StudentCardService implements IStudentCardService {
     final StudentCardMapper studentCardMapper;
 
     @Override
-    public StudentCardDto setStudentCardStatus(Long id, boolean status) {
-        final Optional<Student> optionalStudent = studentRepository.findById(id);
-        if(optionalStudent.isPresent()) {
-            final Optional<StudentCard> optionalStudentCard = studentCardRepository.findById(optionalStudent.get().getStudentCard().getId());
-            if(optionalStudentCard.isPresent()) {
-                final StudentCard studentCard = optionalStudentCard.get();
-                studentCard.setActive(status);
-                studentCardRepository.save(studentCard);
-                studentCard.setStudent(optionalStudent.get());
+    public StudentCardDto setStudentCardStatus(Long studentId, boolean status) {
+        StudentCard studentCard = studentRepository.findById(studentId)
+                .map(Student::getStudentCard) // StudentCard'ı al
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student Card Not Found"));
 
-                return studentCardMapper.toStudentCardDto(studentCard);
-            }
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student Card Not Found");
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student Not Found");
+        // Status güncelle
+        studentCard.setActive(status);
+        studentCardRepository.save(studentCard);
+
+        // DTO dönüşümü
+        return studentCardMapper.toStudentCardDto(studentCard);
     }
+
 
     @Override
     public StudentCardDto activateStudentCard(Long id) {
