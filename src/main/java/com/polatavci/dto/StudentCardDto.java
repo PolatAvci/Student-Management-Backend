@@ -19,6 +19,6 @@ public class StudentCardDto {
 
     private Boolean active;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL) // Bu alan  null olduğunda jsonda görünmez
+    // @JsonInclude(JsonInclude.Include.NON_NULL) // Bu alan  null olduğunda jsonda görünmez
     private StudentSummaryDto student;
 }

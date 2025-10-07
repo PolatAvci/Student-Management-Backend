@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class StudentSummaryDto {
     private Long id;
 
-    private String cardNumber;
+    private String name;
 
-    private Boolean active;
+    private String surname;
 }
